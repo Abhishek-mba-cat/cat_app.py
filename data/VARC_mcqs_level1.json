@@ -1,0 +1,12 @@
+[
+  {
+    "question": "Choose the synonym of 'happy'.",
+    "options": ["sad", "joyful", "angry", "tired"],
+    "answer": "joyful"
+  },
+  {
+    "question": "Choose the antonym of 'cold'.",
+    "options": ["hot", "warm", "chilly", "freezing"],
+    "answer": "hot"
+  }
+]
