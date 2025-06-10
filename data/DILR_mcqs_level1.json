@@ -1,0 +1,12 @@
+[
+  {
+    "question": "If A > B and B > C, then:",
+    "options": ["A > C", "C > A", "A = C", "Cannot be determined"],
+    "answer": "A > C"
+  },
+  {
+    "question": "Find the next number: 2, 4, 8, 16, __?",
+    "options": ["18", "20", "24", "32"],
+    "answer": "32"
+  }
+]
