@@ -1,48 +1,45 @@
-
 import streamlit as st
 import json
 import os
 import random
 
-st.title("🧠 MCQ Practice - QA / VARC / DILR")
+st.title("🎯 CAT MCQ Practice")
 
-# Subject and Level Selection
-subject = st.selectbox("Choose Subject", ["QA", "VARC", "DILR"])
-level = st.selectbox("Choose Difficulty Level", list(range(1, 11)))
+# Subject and level selection
+subject = st.selectbox("Select Subject", ["Quantitative Ability (QA)", "Verbal Ability and Reading Comprehension (VARC)", "Data Interpretation and Logical Reasoning (DILR)"])
+level = st.selectbox("Select Difficulty Level", ["Level 1", "Level 2"])
 
-# Build file path
-file_path = f"data/{subject}_mcqs_level{level}.json"
+# Convert subject to filename-safe key
+subject_keys = {
+    "Quantitative Ability (QA)": "QA",
+    "Verbal Ability and Reading Comprehension (VARC)": "VARC",
+    "Data Interpretation and Logical Reasoning (DILR)": "DILR"
+}
 
-# Check if file exists
-if os.path.exists(file_path):
+file_path = f"data/{subject_keys[subject]}_mcqs_{level.lower().replace(' ', '')}.json"
+
+if not os.path.exists(file_path):
+    st.warning("Questions for this level/subject are not yet added.")
+else:
     with open(file_path, "r") as f:
         questions = json.load(f)
 
-    if questions:
-        # Shuffle questions
-        random.shuffle(questions)
-        score = 0
-        total = len(questions)
+    random.shuffle(questions)  # Shuffle questions each time
 
-        for idx, q in enumerate(questions):
-            st.markdown(f"**Q{idx+1}. {q['question']}**")
-            options = q['options']
-            user_ans = st.radio("Select your answer:", options, key=idx)
-            if 'submit' not in st.session_state:
-                st.session_state.submit = False
+    score = 0
+    total = len(questions)
 
-            if st.button(f"Submit Q{idx+1}", key=f"submit_{idx}"):
-                if user_ans == q['answer']:
-                    st.success("✅ Correct!")
-                    score += 1
-                else:
-                    st.error(f"❌ Incorrect! Correct Answer: {q['answer']}")
-                st.session_state.submit = True
-                st.markdown("---")
+    for i, q in enumerate(questions):
+        st.write(f"**Q{i+1}: {q['question']}**")
+        user_answer = st.radio("Choose an option:", q["options"], key=i)
 
-        if st.session_state.submit:
-            st.info(f"Your score: {score} / {total}")
-    else:
-        st.warning("No questions found at this level.")
-else:
-    st.warning("No MCQ file found for this selection.")
+        if st.button(f"Submit Answer {i+1}", key=f"btn{i}"):
+            # Debug print (you can remove this after testing)
+            st.write(f"User selected: {user_answer}, Correct: {q['answer']}")
+            
+            if user_answer.strip().lower() == q["answer"].strip().lower():
+                st.success("✅ Correct!")
+            else:
+                st.error(f"❌ Wrong. Correct answer: {q['answer']}")
+
+            st.markdown("---")
